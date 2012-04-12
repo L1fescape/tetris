@@ -103,6 +103,7 @@ var Blocks = {
 var Tetris = {
   canvas : {},
   ctx : {},
+  score : 0,
   interval : 0,
   settings : {
     width : 0,
@@ -177,6 +178,7 @@ var Tetris = {
         if (delRow) {
           Tetris.board.deleteRow(r);
           Tetris.board.shiftRows(r);
+          Tetris.score += 40;
           r++;
         }
       }
@@ -184,8 +186,10 @@ var Tetris = {
   },
   newBlock : function() {
     Tetris.curBlock = new Block();
-    if (!Tetris.check(Tetris.curBlock))
-      console.log("Game Over");
+    if (!Tetris.check(Tetris.curBlock)) {
+      clearInterval(Tetris.interval);
+      $("#gameOver").show();
+    }
   },
   moveBlock : function() {
     var block = new clone(Tetris.curBlock);
@@ -198,6 +202,7 @@ var Tetris = {
       Tetris.board.checkRow();
       Tetris.newBlock();
     }
+    $("#score").html(Tetris.score);
   },
   timer : 0,
   draw : function() {

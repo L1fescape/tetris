@@ -2,9 +2,45 @@
 <head>
   <title>Tetris</title>
   <script src="jquery-1.7.1.min.js"></script>
+  <style>
+    body {
+      width:520px;
+    }
+    #gameOver {
+      width:200px;
+      position:absolute;
+      top:200px;
+      left:35px;
+      background:#eee;
+      padding:20px 20px 40px;
+      text-align:center;
+      display:none;
+    }
+    #side {
+      width:200px;
+      float:right;
+    }
+  </style>
 </head>
 <body>
-  <canvas id="gameBoard" width="300" height="600"></canvas>
+  <div id="gameOver">
+    <h1>Game Over</h1><br />
+    Oh noes!
+  </div>
+  <div id="side">
+    <h2>Score</h2>
+    <div id="score">0</div>
+    <br />
+    <br />
+    <h2>Controls</h2>
+    W - Rotate <br />
+    A - Left <br />
+    S - Down <br />
+    D - Right <br />
+  </div>
+  <div id="main">
+    <canvas id="gameBoard" width="300" height="600"></canvas>
+  </div>
 </body>
 <script src="tetris.js"></script>
 </html>
