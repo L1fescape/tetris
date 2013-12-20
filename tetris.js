@@ -67,7 +67,7 @@ var Tetris = (function() {
                 [0, 1, 0, 0]
             ],
             pivot : [1, 1],
-            color: '#888C65'
+            color: '#888c65'
         },
         2: {
             matrix: [
@@ -77,7 +77,7 @@ var Tetris = (function() {
                 [0, 0, 0, 0]
             ],
             pivot : [1, 1],
-            color : '#D9CA9C'
+            color : '#d9cA9c'
         },
         3: {
             matrix: [
@@ -87,7 +87,7 @@ var Tetris = (function() {
                 [0, 0, 0, 0]
             ],
             pivot : [1, 1],
-            color : '#D98162'
+            color : '#d98162'
         },
         4: {
             matrix: [
@@ -97,7 +97,7 @@ var Tetris = (function() {
                 [0, 0, 0, 0]
             ],
             pivot : [1, 1],
-            color: '#A65858'
+            color: '#a65858'
         },
         5: {
             matrix: [
@@ -108,6 +108,16 @@ var Tetris = (function() {
             ],
             pivot : [1, 1],
             color: '#788880'
+        },
+        6: {
+            matrix: [
+                [0, 0, 1, 0],
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]
+            ],
+            pivot : [1, 1],
+            color: '#79b7e7'
         }
     };
 
@@ -126,6 +136,32 @@ var Tetris = (function() {
         scoreBlock: $,
         gameOver: $,
         pauseBlock: $,
+        reset: function() {
+            Tetris.gameOver.hide();
+            Tetris.pauseBlock.hide();
+            Tetris.board.matrix = [
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '']
+            ];
+        },
         init : function(args) {
             Tetris.curBlock = new Block();
 
@@ -139,7 +175,10 @@ var Tetris = (function() {
             Tetris.settings.width = args.gameBoard.width();
             Tetris.settings.height = args.gameBoard.height();
 
+            Tetris.reset();
+
             Tetris.interval = setInterval('Tetris.draw()', 10);
+            Tetris.canvas.trigger('tetris.newgame');
 
             return Tetris;
         },
@@ -219,6 +258,7 @@ var Tetris = (function() {
             if (!Tetris.check(Tetris.curBlock)) {
                 clearInterval(Tetris.interval);
                 Tetris.gameOver.show();
+                Tetris.canvas.trigger('tetris.gameover');
             }
         },
         moveBlock: function() {
@@ -318,8 +358,10 @@ var Tetris = (function() {
                     Tetris.pauseBlock.hide();
                 }
                 Tetris.interval = setInterval("Tetris.draw()", 10);
+                Tetris.canvas.trigger('tetris.resume');
             } else {
                 clearInterval(Tetris.interval);
+                Tetris.canvas.trigger('tetris.pause');
                 Tetris.interval = 0;
                 if (Tetris && Tetris.pauseBlock && (typeof Tetris.pauseBlock.hide === 'function')) {
                     Tetris.pauseBlock.show();
