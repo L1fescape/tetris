@@ -1,6 +1,5 @@
 /**
  * HTML5 Tetris
- * https://github.com/devlato/HTML5-Tetris
  */
 
 
