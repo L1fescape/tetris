@@ -1,7 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Tetris</title>
-  <script src="jquery-1.7.1.min.js"></script>
   <style>
     body {
       width:520px;
@@ -27,20 +28,33 @@
     <h1>Game Over</h1><br />
     Oh noes!
   </div>
+  <div id="pause">
+    <h1>Paused</h1>
+  </div>
   <div id="side">
     <h2>Score</h2>
     <div id="score">0</div>
-    <br />
-    <br />
-    <h2>Controls</h2>
-    W - Rotate <br />
-    A - Left <br />
-    S - Down <br />
-    D - Right <br />
   </div>
   <div id="main">
-    <canvas id="gameBoard" width="300" height="600"></canvas>
+    <canvas id="gameBoard"></canvas>
   </div>
 </body>
 <script src="tetris.js"></script>
+<script>
+  var options = { 
+    gameBoard: document.getElementById('gameBoard'), 
+    scoreBlock: document.getElementById('score'), 
+    gameOver: document.getElementById('gameOver'),
+    pauseBlock: document.getElementById('pause'),
+    blockSize: 30,
+    controls: {
+      left: 37,
+      right: 39,
+      rotate: 38,
+      drop: 40
+    }
+  };
+  var game = new Tetris(options);
+
+</script>
 </html>

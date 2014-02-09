@@ -1,30 +1,29 @@
-HTML5-Tetris-2
-==============
+# HTML5 Tetris
+> Tetris in the browser! 
 
 
-HTML5 based Tetris (Canvas etc.)
+## Usage
 
-
-== Usage == 
-
+```
 var options = { 
-  gameBoard: $('#gameBoard'), 
-  scoreBlock: $('#scoreBlock'), 
-  gameOver: $('#gameOver'), 
-  pauseBlock: $('#pauseBlock') 
-}; 
+  gameBoard: document.getElementById('gameBoard'), 
+  scoreBlock: document.getElementById('score'), 
+  gameOver: document.getElementById('gameOver'), 
+  pauseBlock: document.getElementById('pauseBlock') 
+};
+document.onkeydown = function(e) {
+  Tetris.keyBindings(e.which, e);
+}
+var game = Tetris.init(options);
+```
 
-var game = Tetris.init(options); 
+## Available Events
 
+* `newgame` — triggers when new game started; 
+* `gameover` — triggers when game is over, also, the score is passed in data param; 
+* `pause` — triggers when the game is paused; 
+* `resume` — triggers when the game is resumed after pause; 
 
-== Available events == 
+## Useful Methods
 
-* tetris.newgame — triggers when new game started; 
-* tetris.gameover — triggers when game is over, also, the score is passed in data param; 
-* tetris.pause — triggers when the game is paused; 
-* tetris.resume — triggers when the game is resumed after pause; 
-
-
-== Useful methods == 
-
-* keyBindings(e, data) — handler of the game keyboard input; 
+* `keyBindings(keyCode, event)` — handler of the game keyboard input; 
