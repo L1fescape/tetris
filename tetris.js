@@ -1,5 +1,7 @@
 function Tetris(config) {
 
+  // TODO make this actually readable/understandable
+
   var canvas = {},
       ctx = {},
       scoreBlock,
@@ -214,8 +216,9 @@ function Tetris(config) {
               game.curBlock.rotate(-1);
             matchedKey = true;
             break;
+          case 80:  // P
           case 27:  // Esc
-            Tetris.pause();
+            pause();
             matchedKey = true;
             break;
         }

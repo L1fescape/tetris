@@ -1,6 +1,41 @@
-# HTML5 Tetris
+# Tetris
 > Tetris in the browser! 
 
+## Installation
+
+Clone this repo:
+
+```
+git clone https://github.com/akenn/HTML5-Tetris
+```
+
+## Running
+
+Load `index.html` in the browser via your favorite web server.
+
+I like to use python's built in one. 
+
+If you're using python2, run:
+
+```
+python -m SimpleHTTPServer
+```
+
+If you're on python3:
+
+```
+python -m http.server
+```
+
+(you can check which version with `python --version`)
+
+Then navigate to `http://localhost:8000/`
+
+That'll start a web server on port 8000. If you'd like to choose another port, pass it in as an argument. For example:
+
+```
+python -m http.server 1337
+```
 
 ## Usage
 
@@ -27,3 +62,7 @@ var game = Tetris.init(options);
 ## Useful Methods
 
 * `keyBindings(keyCode, event)` — handler of the game keyboard input; 
+
+## Todo
+
+* Mobile bindings

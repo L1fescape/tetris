@@ -28,7 +28,7 @@
     <h1>Game Over</h1><br />
     Oh noes!
   </div>
-  <div id="pause">
+  <div id="pause" style="display:none">
     <h1>Paused</h1>
   </div>
   <div id="side">
@@ -51,7 +51,8 @@
       left: 37,
       right: 39,
       rotate: 38,
-      drop: 40
+      drop: 40,
+      pause: 80
     }
   };
   var game = new Tetris(options);
