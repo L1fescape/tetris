@@ -1,68 +1,33 @@
 # Tetris
-> Tetris in the browser! 
+> A zero-dependency implementation of Tetris in the browser
 
-## Installation
+## Exampe Usage
 
-Clone this repo:
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tetris</title>
+</head>
+<body>
+  <canvas id="gameBoard"></canvas>
+</body>
 
-```
-git clone https://github.com/akenn/HTML5-Tetris
-```
-
-## Running
-
-Load `index.html` in the browser via your favorite web server.
-
-I like to use python's built in one. 
-
-If you're using python2, run:
-
-```
-python -m SimpleHTTPServer
-```
-
-If you're on python3:
-
-```
-python -m http.server
+<script>  
+// create an instance of the game with options
+var game = Tetris.init({ 
+  gameBoard : document.getElementById('gameBoard'),
+  autostart : false,
+  eventListener : document.onkeydown
+});
+</script>
+</html>
 ```
 
-(you can check which version with `python --version`)
+## Events
 
-Then navigate to `http://localhost:8000/`
-
-That'll start a web server on port 8000. If you'd like to choose another port, pass it in as an argument. For example:
-
-```
-python -m http.server 1337
-```
-
-## Usage
-
-```
-var options = { 
-  gameBoard: document.getElementById('gameBoard'), 
-  scoreBlock: document.getElementById('score'), 
-  gameOver: document.getElementById('gameOver'), 
-  pauseBlock: document.getElementById('pauseBlock') 
-};
-document.onkeydown = function(e) {
-  Tetris.keyBindings(e.which, e);
-}
-var game = Tetris.init(options);
-```
-
-## Available Events
-
-* `newgame` — triggers when new game started; 
-* `gameover` — triggers when game is over, also, the score is passed in data param; 
-* `pause` — triggers when the game is paused; 
-* `resume` — triggers when the game is resumed after pause; 
-
-## Useful Methods
-
-* `keyBindings(keyCode, event)` — handler of the game keyboard input; 
-
-## Todo
-
-* Mobile bindings
+* `newgame` — triggers when new game started
+* `gameover(score)` — triggers when game is over. `score` is passed with the event.
+* `pause` — triggers when the game is paused
+* `resume` — triggers when the game is resumed

@@ -162,9 +162,18 @@ function Tetris(config) {
         },
       },
       reset = function() {
-        if (gameOver && gameOver.style)
+        if (gameOver){
+          if (!gameOver.style)
+            gameOver.style = {};
           gameOver.style.display = "none";
+        }
         game.grid = game.createGrid(settings.width, settings.height);
+        if (pauseBlock) {
+          if (!pauseBlock.style){
+            pauseBlock.style = {};
+          }
+          pauseBlock.style.display = "none";
+        }
 
         trigger('reset');
         trigger('resume');
@@ -172,7 +181,10 @@ function Tetris(config) {
       pause = function() {
         if (game.interval == 0) {
           game.interval = setInterval(game.draw, settings.interval);
-          if (pauseBlock && pauseBlock.style) {
+          if (pauseBlock) {
+            if (!pauseBlock.style){
+              pauseBlock.style = {};
+            }
             pauseBlock.style.display = "none";
           }
           trigger('resume');
