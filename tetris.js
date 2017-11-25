@@ -90,11 +90,13 @@ function Tetris(config) {
         draw: function() {
           ctx.clearRect(0, 0, game.width, game.height);
 
-          ctx.fillStyle = '#F2F2F2';
-          ctx.beginPath();
-          ctx.rect(0, 0, game.width, game.height);
-          ctx.closePath();
-          ctx.fill();
+          if (config.backgroundColor) {
+            ctx.fillStyle = config.backgroundColor;
+            ctx.beginPath();
+            ctx.rect(0, 0, game.width, game.height);
+            ctx.closePath();
+            ctx.fill();
+          }
 
           if (game.timer >= settings.interval) {
             game.moveBlock();
