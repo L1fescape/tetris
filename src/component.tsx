@@ -13,7 +13,7 @@ const defaultConfig: TetrisConfig = {
   colors: {
     i: '#568C87',
     o: '#F2EEB3',
-    t: '#788880',
+    t: '#E1B753',
     s: '#326773',
     z: '#6D7D6B',
     j: '#A67C6D',
