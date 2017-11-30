@@ -4,7 +4,8 @@
   "main": "src/index.ts",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "example": "cd example && yarn start"
   },
   "dependencies": {
     "lodash": "^4.17.4",
