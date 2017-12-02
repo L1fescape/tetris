@@ -92,9 +92,10 @@ export class Tetris extends React.Component<Props, State> {
     if (!ctx) return
 
     const { config, game } = this.state
+    let newGrid = [...game.grid]
     // add the current block to the grid so it can be rendered
     if (game.currentBlock) {
-        game.grid = addBlock(game.currentBlock, game.grid, config)
+        newGrid = addBlock(game.currentBlock, newGrid, config)
     }
     // clear screen
     const width = this.gameCanvas.clientWidth
@@ -103,12 +104,12 @@ export class Tetris extends React.Component<Props, State> {
       width: width / config.columns,
       height: height / config.rows,
     }
-    ctx.clearRect(0, 0, width, height)
+    ctx.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height)
     // draw game state
-    for (var r = 0; r < game.grid.length; r++) {
-      for (var c = 0; c < game.grid[r].length; c++) {
-        if (game.grid[r][c] != '') {
-          ctx.fillStyle = game.grid[r][c]
+    for (var r = 0; r < newGrid.length; r++) {
+      for (var c = 0; c < newGrid[r].length; c++) {
+        if (newGrid[r][c] !== '') {
+          ctx.fillStyle = newGrid[r][c]
           ctx.beginPath()
           var x = c * blockSize.width
           var y = r * blockSize.height

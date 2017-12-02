@@ -11,7 +11,7 @@ export function gameTick(oldGame: TetrisGameState, config: TetrisConfig): Tetris
             ...game.currentBlock,
             position: {
                 ...game.currentBlock.position,
-                x: game.currentBlock.position.x + 1
+                y: game.currentBlock.position.y + 1
             }
         }
         if (!validPosition(tmpBlock, game.grid)) {
@@ -33,6 +33,7 @@ export function gameTick(oldGame: TetrisGameState, config: TetrisConfig): Tetris
     if (!game.currentBlock) {
         game.currentBlock = game.blockQueue.pop()
     }
+    console.log(game.grid[0])
     game.lastUpdate = new Date().getTime()
     return game
 }
@@ -69,13 +70,30 @@ function removeEmptyRows(grid: TetrisGrid, config: TetrisConfig): TetrisGrid {
 
 function validPosition(statefulBlock: BlockWithPosition, grid: TetrisGrid): boolean {
     const { block, position } = statefulBlock
-    if (position.x + block.matrix.length > grid.length) {
-        return false
-    }
-    if (position.y + block.matrix[0].length > grid[0].length) {
-        return false
+    for (let y = 0; y < block.matrix.length; y++) {
+        for (let x = 0; x < block.matrix[y].length; x++) {
+            if (block.matrix[y][x]) {
+                if (position.x < 0) {
+                    return false
+                }
+                if (position.x + x > grid.length) {
+                    return false
+                }
+                if (position.y + y > grid[0].length) {
+                    return false
+                }
+                if (grid[position.y + y][position.x + x]) {
+                    return false
+                }
+            }
+        }
     }
     return true
+}
+
+function getRandomBlock(): Block {
+    const keys = Object.keys(Blocks)
+    return Blocks[keys[keys.length * Math.random() << 0]]
 }
 
 // copy over from the existing queue and populate empty items
@@ -85,12 +103,11 @@ function getAndPopulateBlockQueue(queue: BlockQueue, config: TetrisConfig): Bloc
         if (queue[i]) {
             newQueue.push(queue[i])
         } else {
-            const keys = Object.keys(Blocks)
             newQueue[i] = {
-                block: Blocks[keys[keys.length * Math.random() << 0]],
+                block: getRandomBlock(),
                 position: {
-                    x: 0,
-                    y: Math.floor(config.columns/2),
+                    x: Math.floor(config.columns/2),
+                    y: 0,
                 }
             }
         }
@@ -105,11 +122,11 @@ export function addBlock(statefulBlock: BlockWithPosition, grid: TetrisGrid, con
     const { block, position } = statefulBlock
     const newGrid = cloneGrid(grid, config)
     // write new block to grid
-    for (let i = 0; i < block.matrix.length; i++) {
-        for (let j = 0; j < block.matrix[i].length; j++) {
-            if (block.matrix[i][j]) {
+    for (let y = 0; y < block.matrix.length; y++) {
+        for (let x = 0; x < block.matrix[y].length; x++) {
+            if (block.matrix[y][x]) {
                 // todo(amk): check bounds
-                newGrid[i + position.x][Math.floor(grid[0].length / 2) + j] = config.colors[block.name]
+                newGrid[y + position.y][Math.floor(grid[0].length / 2) + x] = config.colors[block.name]
             }
         }
     }
