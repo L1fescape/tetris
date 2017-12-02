@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Blocks, TetrisConfig, TetrisGameState } from './models'
-import { addBlock, cloneGrid, gameTick } from './helpers'
+import { Blocks, TetrisConfig, TetrisGameState, MoveDirection } from './models'
+import { addBlock, cloneGrid, gameTick, moveCurrentPiece } from './helpers'
 import { defaults } from 'lodash'
 
 const defaultConfig: TetrisConfig = {
@@ -9,7 +9,7 @@ const defaultConfig: TetrisConfig = {
   autostart: false,
   queueLength: 4,
   fps: 60,
-  updateInterval: 0.1 * 1000,
+  updateInterval: 0.5 * 1000,
   colors: {
     i: '#568C87',
     o: '#F2EEB3',
@@ -73,7 +73,30 @@ export class Tetris extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown)
     this.loop()
+  }
+
+  private handleKeyDown = (e) => {
+    const { config, game } = this.state
+    if (!game.currentBlock) {
+      return
+    }
+    const keyMap = {
+      38: MoveDirection.Rotate,
+      37: MoveDirection.Left,
+      39: MoveDirection.Right,
+      40: MoveDirection.Down,
+    }
+    const direction = keyMap[e.which]
+    if (direction) {
+      this.setState({
+        game: {
+          ...game,
+          currentBlock: moveCurrentPiece(direction, game.currentBlock, game.grid, config),
+        }
+      })
+    }
   }
 
   public render() {
@@ -92,22 +115,21 @@ export class Tetris extends React.Component<Props, State> {
     if (!ctx) return
 
     const { config, game } = this.state
-    let newGrid = [...game.grid]
+    let newGrid = [...game.grid] // todo(amk): y
     // add the current block to the grid so it can be rendered
     if (game.currentBlock) {
         newGrid = addBlock(game.currentBlock, newGrid, config)
     }
     // clear screen
-    const width = this.gameCanvas.clientWidth
-    const height = this.gameCanvas.clientHeight
+    const { clientWidth, clientHeight } = this.gameCanvas
     const blockSize = {
-      width: width / config.columns,
-      height: height / config.rows,
+      width: clientWidth / config.columns,
+      height: clientHeight / config.rows,
     }
     ctx.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height)
     // draw game state
-    for (var r = 0; r < newGrid.length; r++) {
-      for (var c = 0; c < newGrid[r].length; c++) {
+    for (let r = 0; r < newGrid.length; r++) {
+      for (let c = 0; c < newGrid[r].length; c++) {
         if (newGrid[r][c] !== '') {
           ctx.fillStyle = newGrid[r][c]
           ctx.beginPath()

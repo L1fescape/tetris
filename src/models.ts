@@ -82,3 +82,10 @@ export const Blocks: {[key: string]: Block} = {
     ],
   },
 }
+
+export enum MoveDirection {
+  Left = 1,
+  Right,
+  Rotate,
+  Down,
+}

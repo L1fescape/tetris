@@ -1,4 +1,13 @@
-import { Block, Blocks, BlockQueue, TetrisGameState, TetrisConfig, TetrisGrid, BlockWithPosition } from './models'
+import {
+    Block,
+    Blocks,
+    BlockQueue,
+    TetrisGameState,
+    TetrisConfig,
+    TetrisGrid,
+    BlockWithPosition,
+    MoveDirection,
+} from './models'
 
 export function gameTick(oldGame: TetrisGameState, config: TetrisConfig): TetrisGameState {
     let game: TetrisGameState = {
@@ -33,7 +42,6 @@ export function gameTick(oldGame: TetrisGameState, config: TetrisConfig): Tetris
     if (!game.currentBlock) {
         game.currentBlock = game.blockQueue.pop()
     }
-    console.log(game.grid[0])
     game.lastUpdate = new Date().getTime()
     return game
 }
@@ -76,10 +84,10 @@ function validPosition(statefulBlock: BlockWithPosition, grid: TetrisGrid): bool
                 if (position.x < 0) {
                     return false
                 }
-                if (position.x + x > grid.length) {
+                if (position.x + x >= grid[0].length) {
                     return false
                 }
-                if (position.y + y > grid[0].length) {
+                if (position.y + y >= grid.length) {
                     return false
                 }
                 if (grid[position.y + y][position.x + x]) {
@@ -126,9 +134,65 @@ export function addBlock(statefulBlock: BlockWithPosition, grid: TetrisGrid, con
         for (let x = 0; x < block.matrix[y].length; x++) {
             if (block.matrix[y][x]) {
                 // todo(amk): check bounds
-                newGrid[y + position.y][Math.floor(grid[0].length / 2) + x] = config.colors[block.name]
+                newGrid[position.y + y][position.x + x] = config.colors[block.name]
             }
         }
     }
     return newGrid
+}
+
+function rotateMatrix(matrix: number[][]): number[][] {
+    const rows = matrix.length
+    const cols = matrix[0].length
+    const newMatrix = [...Array(cols).keys()].map(i => Array(rows))
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            newMatrix[c][rows - r] = matrix[r][c]
+        }
+    }
+    return newMatrix
+}
+
+export function moveCurrentPiece(direction: MoveDirection, currentBlock: BlockWithPosition, grid: TetrisGrid, config: TetrisConfig): BlockWithPosition {
+    if (direction === MoveDirection.Left) {
+        const tmpBlock: BlockWithPosition = {
+            ...currentBlock,
+            position: {
+                ...currentBlock.position,
+                x: currentBlock.position.x - 1
+            }
+        }
+        return validPosition(tmpBlock, grid) ? tmpBlock : currentBlock
+    }
+    if (direction === MoveDirection.Right) {
+        const tmpBlock: BlockWithPosition = {
+            ...currentBlock,
+            position: {
+                ...currentBlock.position,
+                x: currentBlock.position.x + 1
+            }
+        }
+        return validPosition(tmpBlock, grid) ? tmpBlock : currentBlock
+    }
+    if (direction === MoveDirection.Rotate) {
+        const tmpBlock: BlockWithPosition = {
+            ...currentBlock,
+            block: {
+                ...currentBlock.block,
+                matrix: rotateMatrix(currentBlock.block.matrix),
+            },
+        }
+        return validPosition(tmpBlock, grid) ? tmpBlock : currentBlock
+    }
+    if (direction === MoveDirection.Down) {
+        const tmpBlock: BlockWithPosition = {
+            ...currentBlock,
+            position: {
+                ...currentBlock.position,
+                y: currentBlock.position.y + 1
+            }
+        }
+        return validPosition(tmpBlock, grid) ? tmpBlock : currentBlock
+    }
+    return currentBlock
 }
